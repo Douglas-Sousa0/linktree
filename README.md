@@ -1,73 +1,31 @@
-# React + TypeScript + Vite
+# Resumo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Nesse projeto pessoal decidi criar uma plataforma de Linktree para seguir treinando o que aprendi recentemente, esse sistema permitirá que o usuário crie sua própria conta e salve os links que desejar
 
-Currently, two official plugins are available:
+Os links poderão ser customizados com a cor da fonte e cor de fundo que o usuário desejar
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Funcionalidades
+- Criação de conta
+- Login
+- Criação de links
 
-## React Compiler
+# 🛠️ Tecnologias 
+- React
+- TypeScript
+- Firebase (banco de dados e autenticação)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# ⚙️ Como rodar localmente
+Para rodar esse projeto é necessário:
 
-## Expanding the ESLint configuration
+### NodeJS
+Realizar a instalação do **NodeJS**  (https://nodejs.org/en/download) em sua máquina
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Firebase
+Criar uma conta no **Firebase** (https://firebase.google.com/?hl=pt-br), em seguida configurar o Firestore e Authentication para possuir o sistema de banco de dados e autenticação
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Após isso basta acessar a configuração do projeto para obter os dados da integração com o Firebase que ficarão no arquivo **firebase.tsx** ou em um arquivo **.env**
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Vite
+Utilizamos o **Vite** (https://vite.dev/) para rodar o projeto, com isso basta acessar a pasta do projeto para abrir o CMD e utilizar o comando **npm run dev**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Com isso o projeto será iniciado através do **http://localhost:5173/**
