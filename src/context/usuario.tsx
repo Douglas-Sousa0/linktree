@@ -27,15 +27,11 @@ export function UsuarioProvider({ children }: UsuarioProviderProps){
             }
         })
         
-        unsub()
-        
         return () => {
             console.log('Unsubscribing')
             unsub()
         }
     }, [])
-
-   
 
     return(
         <UsuarioContext.Provider value={ { uid, alterar_uid }}>
