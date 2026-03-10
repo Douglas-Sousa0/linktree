@@ -13,6 +13,7 @@ Os links poderão ser customizados com a cor da fonte e cor de fundo que o usuá
 - React
 - TypeScript
 - Firebase (banco de dados e autenticação)
+- Tailwind
 
 # ⚙️ Como rodar localmente
 Para rodar esse projeto é necessário:
