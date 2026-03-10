@@ -79,7 +79,7 @@ export function Admin(){
             console.log('Erro ao excluir link')
             console.log(erro)
         })
-        }
+    }
 
     useEffect(() => {
         buscar_links()

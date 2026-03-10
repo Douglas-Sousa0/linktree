@@ -7,21 +7,36 @@ import { createUserWithEmailAndPassword } from 'firebase/auth'
 export function Cadastrar(){
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
+    const [confirmarSenha, setConfirmarSenha] = useState('')
     
     function cadastrar_conta(e: FormEvent){
         e.preventDefault()
 
-        createUserWithEmailAndPassword(auth, email, senha)
-        .then( () => {
-            console.log('Cadastro realizado com sucesso')
+        const caracteres_especiais = ['*', '#', '?', '!', '~', '@', '[', ']', '{', '}', '%', '$', '&']
+        const possui_caracter_especial = senha.split('').some(caracter => caracteres_especiais.includes(caracter))
 
-            setEmail('')
-            setSenha('')
-        })
-        .catch(erro => {
-            console.log('Erro ao cadastrar')
-            console.log(erro)
-        })
+        if(possui_caracter_especial){
+            if(senha === confirmarSenha){
+                createUserWithEmailAndPassword(auth, email, senha)
+                .then( () => {
+                    console.log('Cadastro realizado com sucesso')
+
+                    setEmail('')
+                    setSenha('')
+                    setConfirmarSenha('')
+                })
+                .catch(erro => {
+                    console.log('Erro ao cadastrar')
+                    console.log(erro)
+                })
+            }
+            else{
+                console.log('A senha deve ser a mesma em ambos os campos')
+            } 
+        } 
+        else{
+            console.log('A senha deve conter pelo menos 1 caracter especial')
+        }
     }
 
     return(
@@ -51,6 +66,19 @@ export function Cadastrar(){
                 placeholder='Digite sua senha'
                 value={senha}
                 onChange={e => setSenha(e.target.value)}
+                autoComplete='off'
+                required
+                />
+
+                <Label htmlFor='confirmar-senha'>Confirmar Senha</Label>
+
+                <Input
+                type='password'
+                id='confirmar-senha'   
+                placeholder='Confirme sua senha'
+                value={confirmarSenha}
+                onChange={e => setConfirmarSenha(e.target.value)}
+                autoComplete='off'
                 required
                 />
 
