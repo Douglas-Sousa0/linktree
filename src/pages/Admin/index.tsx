@@ -2,7 +2,7 @@ import { Label } from '../../components/Label'
 import { Input } from '../../components/Input'
 
 import { useEffect, useState } from 'react'
-import { doc, setDoc, getDoc } from 'firebase/firestore'
+import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore'
 import { database } from '../../firebase'
 
 import { UsuarioContext } from '../../context/usuario'
@@ -63,6 +63,23 @@ export function Admin(){
             console.log(erro)
         })
     }
+
+    async function excluir_links(id: string){
+        const index_link = links.findIndex(item => item.idLink === id)
+        links.splice(index_link, 1)
+
+        await updateDoc(doc(database, 'linktrees', uid), {
+            links    
+        })
+        .then(() => {
+            console.log('Link foi removido com sucesso')
+            buscar_links()
+        })
+        .catch(erro => {
+            console.log('Erro ao excluir link')
+            console.log(erro)
+        })
+        }
 
     useEffect(() => {
         buscar_links()
@@ -135,10 +152,15 @@ export function Admin(){
             {links?.length > 0 && links?.map( item => (
                 <div 
                 key={item.idLink}
-                className='w-full text-left rounded-md px-2 py-1 cursor-pointer'
+                className='w-full text-left rounded-md px-2 py-1 cursor-pointer flex justify-between'
                 style={{backgroundColor: item.corFundo, color: item.corTexto}}
                 >
-                    <a href={item.url}>{item.nome}</a>
+                    <a href={item.url} rel='noreferrer' target='_blank' className='flex-1'>{item.nome}</a>
+                    <button
+                    className='cursor-pointer'
+                    style={{color: item.corTexto}}
+                    onClickCapture={ () => excluir_links(item.idLink)}
+                    >Excluir</button>
                 </div>
             ))}
 
