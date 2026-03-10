@@ -1,0 +1,153 @@
+import { Label } from '../../components/Label'
+import { Input } from '../../components/Input'
+
+import { useEffect, useState } from 'react'
+import { doc, setDoc, getDoc } from 'firebase/firestore'
+import { database } from '../../firebase'
+
+import { UsuarioContext } from '../../context/usuario'
+import { useContext } from 'react'
+
+interface LinksProps{
+    idLink: string
+    corFundo: string
+    corTexto: string
+    nome: string
+    url: string
+    data: string
+}
+
+export function Admin(){
+    const [nome, setNome] = useState('')
+    const [url, setUrl] = useState('')
+    const [corTexto, setCorTexto] = useState('#FFFFFF')
+    const [corFundo, setCorFundo] = useState('#000000')
+
+    const [links, setLinks] = useState<LinksProps[]>([])
+
+    const { uid } = useContext(UsuarioContext)
+
+    async function cadastrar_links(){
+        const ref = doc(database, 'linktrees', uid)
+
+        await setDoc(ref, {
+            links: [
+                ...links ?? [],
+                {
+                    idLink: `${uid}-link-${links === undefined ? 1 : links.length + 1}`,
+                    corFundo: corFundo,
+                    corTexto: corTexto,
+                    nome: nome,
+                    url: url,
+                    data: new Date()
+                }
+            ]
+        })
+        .then(() => {
+            console.log('Link cadastrado')
+            buscar_links()
+        })
+        .catch(erro => {
+            console.log('Erro ao cadastrar link')
+            console.log(erro)
+        })
+    }
+    
+    async function buscar_links(){
+        await getDoc(doc(database, 'linktrees', uid))
+        .then(snapshot => {
+            setLinks(snapshot.data()?.links)
+        })
+        .catch(erro => {
+            console.log('Erro ao buscar os links')
+            console.log(erro)
+        })
+    }
+
+    useEffect(() => {
+        buscar_links()
+    }, [])
+
+    return(
+        <>
+        <main className='w-full flex flex-col justify-center items-center px-3'>
+
+            <h1 className='text-white font-medium text-2xl mt-14'>Adicionar Links</h1>
+
+            <form className='max-w-2xl w-full flex flex-col'>
+                <Label htmlFor=''>Nome do Link</Label>
+                <Input
+                type='text'
+                placeholder='Digite o nome do link'
+                value={nome}
+                onChange={e => setNome(e.target.value)}
+                />
+
+                <Label htmlFor=''>URL do Link</Label>
+                <Input
+                type='url'
+                placeholder='Digite a URL'
+                value={url}
+                onChange={e => setUrl(e.target.value)}
+                />
+
+                <div className='flex gap-4'>
+                    <div className='flex gap-1'>
+                        <Label htmlFor=''>Cor do Texto</Label>
+                        <input
+                        className='cursor-pointer'
+                        type='color'
+                        value={corTexto}
+                        onChange={e => setCorTexto(e.target.value)}
+                        />
+                    </div>
+
+                    <div className='flex gap-1'>
+                        <Label htmlFor=''>Cor do Fundo</Label>
+                        <input
+                        className='cursor-pointer'
+                        type='color'
+                        value={corFundo}
+                        onChange={e => setCorFundo(e.target.value)}
+                        />
+                    </div>
+                </div>
+            </form>
+
+            {nome !== '' &&
+            <section className='max-w-2xl w-full flex flex-col gap-4 mt-4'>
+                <div className='border-white border rounded-md p-4'>
+                    <div
+                    className='w-full rounded-md px-2 py-1'
+                    style={{backgroundColor: corFundo, color: corTexto}}>
+                        {nome}
+                    </div>
+                </div>
+                
+                <button onClick={cadastrar_links} className='text-white w-full bg-cyan-900 rounded-md p-1 font-medium cursor-pointer'>Cadastrar</button>
+            </section>
+            }
+
+            <section className='max-w-2xl w-full flex flex-col gap-4 mt-15'>
+
+            <h2 className='text-white text-center text-2xl font-medium'>Meus Links</h2>
+
+            {links?.length > 0 && links?.map( item => (
+                <div 
+                key={item.idLink}
+                className='w-full text-left rounded-md px-2 py-1 cursor-pointer'
+                style={{backgroundColor: item.corFundo, color: item.corTexto}}
+                >
+                    <a href={item.url}>{item.nome}</a>
+                </div>
+            ))}
+
+            {links === undefined &&
+            <span className='text-center text-white'>Ainda não há nenhum link cadastrado</span>
+            }
+            </section>
+            
+        </main>
+        </>
+    )
+}
