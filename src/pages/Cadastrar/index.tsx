@@ -3,6 +3,7 @@ import { Input } from '../../components/Input'
 import { Label } from '../../components/Label'
 import { auth } from '../../firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { toast } from 'react-toastify'
 
 export function Cadastrar(){
     const [email, setEmail] = useState('')
@@ -19,7 +20,7 @@ export function Cadastrar(){
             if(senha === confirmarSenha){
                 createUserWithEmailAndPassword(auth, email, senha)
                 .then( () => {
-                    console.log('Cadastro realizado com sucesso')
+                    toast.success('Cadastro realizado com sucesso')
 
                     setEmail('')
                     setSenha('')
@@ -31,11 +32,11 @@ export function Cadastrar(){
                 })
             }
             else{
-                console.log('A senha deve ser a mesma em ambos os campos')
+                toast.warn('A senha deve ser a mesma em ambos os campos')
             } 
         } 
         else{
-            console.log('A senha deve conter pelo menos 1 caracter especial')
+            toast.warn('A senha deve conter pelo menos 1 caracter especial')
         }
     }
 
