@@ -41,7 +41,7 @@ export function Cadastrar(){
                             break
 
                         default:
-                            toast.error('Um erro inesperado aconteceu, tente mais tarde')
+                            toast.error('Um erro inesperado aconteceu, tente novamente mais tarde')
                             break      
                     }
                 })

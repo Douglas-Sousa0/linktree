@@ -9,6 +9,8 @@ import { signInWithEmailAndPassword } from 'firebase/auth'
 import { UsuarioContext } from '../../context/usuario'
 import { useContext } from 'react'
 
+import { toast } from 'react-toastify'
+
 export function Login(){
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
@@ -28,8 +30,21 @@ export function Login(){
             navigate('/admin')
         })
         .catch(erro => {
-            console.log('Erro ao logar')
-            console.log(erro)
+            console.log(erro.code)
+
+            switch(erro.code){
+                case 'auth/invalid-credential':
+                    toast.warn('E-mail e/ou senha incorreto(s)')
+                    break
+
+                case 'auth/too-many-requests':
+                    toast.warn('Muitas tentativas foram feitas, por favor tente novamente mais tarde')
+                    break
+                
+                default:
+                    toast.error('Um erro inesperado aconteceu, tente novamente mais tarde')
+                
+            }
         })
     }
 
@@ -62,6 +77,7 @@ export function Login(){
                 placeholder='Digite sua senha'
                 value={senha}
                 onChange={e => setSenha(e.target.value)}
+                autoComplete='off'
                 required
                 />
 
