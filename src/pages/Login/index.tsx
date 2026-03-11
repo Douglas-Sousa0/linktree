@@ -43,6 +43,7 @@ export function Login(){
                 
                 default:
                     toast.error('Um erro inesperado aconteceu, tente novamente mais tarde')
+                    break
                 
             }
         })
