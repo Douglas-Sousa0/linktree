@@ -27,8 +27,23 @@ export function Cadastrar(){
                     setConfirmarSenha('')
                 })
                 .catch(erro => {
-                    console.log('Erro ao cadastrar')
-                    console.log(erro)
+                    switch(erro.code){
+                        case 'auth/email-already-in-use':
+                            toast.warn('Esse e-mail já está sendo utilizado')
+                            break
+
+                        case 'auth/invalid-email':
+                            toast.warn('O e-mail digitado é inválido')
+                            break
+                    
+                        case 'auth/weak-password':
+                            toast.warn('A senha deve conter no mínimo 6 caracteres')
+                            break
+
+                        default:
+                            toast.error('Um erro inesperado aconteceu, tente mais tarde')
+                            break      
+                    }
                 })
             }
             else{
