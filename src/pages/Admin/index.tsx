@@ -1,8 +1,8 @@
 import { Label } from '../../components/Label'
 import { Input } from '../../components/Input'
 
-import { useEffect, useState } from 'react'
-import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore'
+import { useEffect, useState, type FormEvent } from 'react'
+import { doc, setDoc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
 import { database } from '../../firebase'
 
 import { UsuarioContext } from '../../context/usuario'
@@ -27,7 +27,9 @@ export function Admin(){
 
     const { uid } = useContext(UsuarioContext)
 
-    async function cadastrar_links(){
+    async function cadastrar_links(e: FormEvent){
+        e.preventDefault()
+
         const ref = doc(database, 'linktrees', uid)
 
         await setDoc(ref, {
@@ -65,20 +67,30 @@ export function Admin(){
     }
 
     async function excluir_links(id: string){
-        const index_link = links.findIndex(item => item.idLink === id)
-        links.splice(index_link, 1)
+        // caso haja mais de um link irá atualizar o doc apenas removendo o link desejado
+        if(links.length > 1){
+            const index_link = links.findIndex(item => item.idLink === id)
+            links.splice(index_link, 1)
 
-        await updateDoc(doc(database, 'linktrees', uid), {
-            links    
-        })
-        .then(() => {
-            console.log('Link foi removido com sucesso')
-            buscar_links()
-        })
-        .catch(erro => {
-            console.log('Erro ao excluir link')
-            console.log(erro)
-        })
+            await updateDoc(doc(database, 'linktrees', uid), {
+                links    
+            })
+            .then(() => {
+                buscar_links()
+            })
+            .catch(erro => {
+                console.log('Erro ao excluir link')
+                console.log(erro)
+            })
+        }
+        // caso seja o único link salvo irá excluir o doc completamente
+        else{
+            await deleteDoc(doc(database, 'linktrees', uid))
+            .then(() => {
+                console.log('Foi feita a exclusão do doc')
+                buscar_links()
+            })
+        }
     }
 
     useEffect(() => {
@@ -91,13 +103,14 @@ export function Admin(){
 
             <h1 className='text-white font-medium text-2xl mt-14'>Adicionar Links</h1>
 
-            <form className='max-w-2xl w-full flex flex-col'>
+            <form onSubmit={ cadastrar_links } className='max-w-2xl w-full flex flex-col'>
                 <Label htmlFor=''>Nome do Link</Label>
                 <Input
                 type='text'
                 placeholder='Digite o nome do link'
                 value={nome}
                 onChange={e => setNome(e.target.value)}
+                required
                 />
 
                 <Label htmlFor=''>URL do Link</Label>
@@ -106,6 +119,7 @@ export function Admin(){
                 placeholder='Digite a URL'
                 value={url}
                 onChange={e => setUrl(e.target.value)}
+                required
                 />
 
                 <div className='flex gap-4'>
@@ -129,25 +143,25 @@ export function Admin(){
                         />
                     </div>
                 </div>
-            </form>
 
             {nome !== '' &&
-            <section className='max-w-2xl w-full flex flex-col gap-4 mt-4'>
-                <div className='border-white border rounded-md p-4'>
-                    <div
-                    className='w-full rounded-md px-2 py-1'
-                    style={{backgroundColor: corFundo, color: corTexto}}>
-                        {nome}
+                <section className='max-w-2xl w-full flex flex-col gap-4 mt-4'>
+                    <div className='border-white border rounded-md p-4'>
+                        <div
+                        className='w-full rounded-md px-2 py-1'
+                        style={{backgroundColor: corFundo, color: corTexto}}>
+                            {nome}
+                        </div>
                     </div>
-                </div>
-                
-                <button onClick={cadastrar_links} className='text-white w-full bg-cyan-900 rounded-md p-1 font-medium cursor-pointer'>Cadastrar</button>
-            </section>
+                    
+                    <button className='text-white w-full bg-cyan-900 rounded-md p-1 font-medium cursor-pointer'>Cadastrar</button>
+                </section>
             }
+            </form>
 
             <section className='max-w-2xl w-full flex flex-col gap-4 mt-15'>
 
-            <h2 className='text-white text-center text-2xl font-medium'>Meus Links</h2>
+                <h2 className='text-white text-center text-2xl font-medium'>Meus Links</h2>
 
             {links?.length > 0 && links?.map( item => (
                 <div 
@@ -165,7 +179,7 @@ export function Admin(){
             ))}
 
             {links === undefined &&
-            <span className='text-center text-white'>Ainda não há nenhum link cadastrado</span>
+                <span className='text-center text-white'>Ainda não há nenhum link cadastrado</span>
             }
             </section>
             
