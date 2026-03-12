@@ -31,28 +31,55 @@ export function Admin(){
         e.preventDefault()
 
         const ref = doc(database, 'linktrees', uid)
+        
+        // caso já existam links irá apenas atualizar apenas o array de links
+        if(links !== undefined){
+            await updateDoc(ref, {
+                links: [
+                    ...links,
+                    {
+                        idLink: `${uid}-${nome.replaceAll(' ', '')}`,
+                        corFundo: corFundo,
+                        corTexto: corTexto,
+                        nome: nome,
+                        url: url,
+                        dataLink: new Date()
+                    }
+                ]
+            })
+            .then(() => {
+                buscar_links()
+            })
+            .catch(erro => {
+                console.log('Erro ao cadastrar link')
+                console.log(erro)
+            })
+        }
 
-        await setDoc(ref, {
-            links: [
-                ...links ?? [],
-                {
-                    idLink: `${uid}-${nome.replaceAll(' ', '')}`,
-                    corFundo: corFundo,
-                    corTexto: corTexto,
-                    nome: nome,
-                    url: url,
-                    data: new Date()
-                }
-            ]
-        })
-        .then(() => {
-            console.log('Link cadastrado')
-            buscar_links()
-        })
-        .catch(erro => {
-            console.log('Erro ao cadastrar link')
-            console.log(erro)
-        })
+        // caso não existam links irá criar o doc contendo o array de links e a data em que o doc foi criado
+        else{
+            await setDoc(ref, {
+                links: [
+                    {
+                        idLink: `${uid}-${nome.replaceAll(' ', '')}`,
+                        corFundo: corFundo,
+                        corTexto: corTexto,
+                        nome: nome,
+                        url: url,
+                        dataLink: new Date()
+                    }
+                ],
+
+                dataGeral: new Date()
+            })
+            .then(() => {
+                buscar_links()
+            })
+            .catch(erro => {
+                console.log('Erro ao cadastrar link')
+                console.log(erro)
+            })
+        }
     }
     
     async function buscar_links(){
@@ -87,7 +114,6 @@ export function Admin(){
         else{
             await deleteDoc(doc(database, 'linktrees', uid))
             .then(() => {
-                console.log('Foi feita a exclusão do doc')
                 buscar_links()
             })
         }
