@@ -28,7 +28,6 @@ export function UsuarioProvider({ children }: UsuarioProviderProps){
         })
         
         return () => {
-            console.log('Unsubscribing')
             unsub()
         }
     }, [])

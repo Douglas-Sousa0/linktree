@@ -24,14 +24,11 @@ export function Login(){
 
         await signInWithEmailAndPassword(auth, email, senha)
         .then( dados => {
-            console.log('Login realizado com sucesso')
             alterar_uid(dados.user.uid)
 
             navigate('/admin')
         })
         .catch(erro => {
-            console.log(erro.code)
-
             switch(erro.code){
                 case 'auth/invalid-credential':
                     toast.warn('E-mail e/ou senha incorreto(s)')
@@ -43,8 +40,7 @@ export function Login(){
                 
                 default:
                     toast.error('Um erro inesperado aconteceu, tente novamente mais tarde')
-                    break
-                
+                    break         
             }
         })
     }
