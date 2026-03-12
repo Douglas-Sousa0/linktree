@@ -36,7 +36,7 @@ export function Admin(){
             links: [
                 ...links ?? [],
                 {
-                    idLink: `${uid}-link-${links === undefined ? 1 : links.length + 1}`,
+                    idLink: `${uid}-${nome.replaceAll(' ', '')}`,
                     corFundo: corFundo,
                     corTexto: corTexto,
                     nome: nome,
