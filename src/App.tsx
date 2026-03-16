@@ -4,6 +4,7 @@ import { Home } from './pages/Home'
 import { Login } from './pages/Login'
 import { Admin } from './pages/Admin'
 import { Cadastrar } from './pages/Cadastrar'
+import { Perfil } from './pages/Perfil'
 
 import { Private } from './private/private'
 
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: '/cadastrar',
         element: <Cadastrar/>
+      },
+      {
+        path: '/perfil/:id_perfil',
+        element: <Perfil/>
       }
     ]
   }

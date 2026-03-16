@@ -199,7 +199,7 @@ export function Admin(){
                     <button
                     className='cursor-pointer'
                     style={{color: item.corTexto}}
-                    onClickCapture={ () => excluir_links(item.idLink)}
+                    onClick={ () => excluir_links(item.idLink)}
                     >Excluir</button>
                 </div>
             ))}
