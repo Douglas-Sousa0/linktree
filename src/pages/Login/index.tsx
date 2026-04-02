@@ -6,16 +6,11 @@ import { useNavigate } from 'react-router'
 import { auth } from '../../firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 
-import { UsuarioContext } from '../../context/usuario'
-import { useContext } from 'react'
-
 import { toast } from 'react-toastify'
 
 export function Login(){
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
-
-    const { uid, alterar_uid } = useContext(UsuarioContext)
 
     const navigate = useNavigate()
 
@@ -23,8 +18,7 @@ export function Login(){
         e.preventDefault()
 
         await signInWithEmailAndPassword(auth, email, senha)
-        .then( dados => {
-            alterar_uid(dados.user.uid)
+        .then( () => {
 
             navigate('/admin')
         })
@@ -47,8 +41,6 @@ export function Login(){
 
     return(
         <>
-        <span className='text-white'>{uid}</span>
-
         <div className='flex flex-col items-center justify-center'>
 
             <h1 className='text-white font-medium text-2xl mt-24'>Login</h1>

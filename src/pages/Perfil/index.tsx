@@ -48,7 +48,7 @@ export function Perfil(){
             className='w-full text-left rounded-md px-2 py-1 cursor-pointer flex justify-between m-auto'
             style={{backgroundColor: item.corFundo, color: item.corTexto}}
             >
-                <a href={item.url} rel='noreferrer' target='_blank' className='flex-1'>{item.nome}</a>
+                <a href={item.url} rel='noreferrer' target='_blank'>{item.nome}</a>
             </div>
         ))}
         </main>
