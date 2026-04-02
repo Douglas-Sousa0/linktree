@@ -2,12 +2,17 @@
 
 Nesse projeto pessoal decidi criar uma plataforma de Linktree para seguir treinando o que aprendi recentemente, esse sistema permitirá que o usuário crie sua própria conta e salve os links que desejar
 
-Os links poderão ser customizados com a cor da fonte e cor de fundo que o usuário desejar
+Os links poderão ser customizados com a cor da fonte e cor de fundo que o usuário desejar, o deploy foi realizado e pode ser acessado no link abaixo:
+
+https://projeto-linktree1.netlify.app/
 
 # Funcionalidades
 - Criação de conta
-- Login
+- Autenticação (restrição da área de admin caso não esteja logado)
 - Criação de links
+- Visualização de links de outras contas na página Home
+
+https://github.com/user-attachments/assets/a6d1612c-8436-4789-9971-53d0aa042446
 
 # 🛠️ Tecnologias 
 - React

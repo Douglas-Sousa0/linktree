@@ -28,6 +28,10 @@ export function UsuarioProvider({ children }: UsuarioProviderProps){
                 alterar_uid(user.uid)
                 setLoading(false)
             }
+            else{
+                alterar_uid('')
+                setLoading(false)
+            }
         })
         
         return () => {

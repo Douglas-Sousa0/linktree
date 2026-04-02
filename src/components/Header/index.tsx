@@ -7,11 +7,10 @@ import { signOut } from 'firebase/auth'
 import { auth } from '../../firebase'
 
 export function Header(){
-    const { uid, alterar_uid } = useContext(UsuarioContext)    
+    const { uid, loading } = useContext(UsuarioContext)    
 
     async function logout(){
         await signOut(auth)
-        alterar_uid('')
     }
 
     return(
@@ -30,7 +29,7 @@ export function Header(){
             
                 }
 
-                {uid.length === 0 &&
+                {!loading && uid.length === 0 &&
                 <>
                     <Link to='/cadastrar' className='font-medium'>Cadastrar</Link>
                     <Link to='/login' className='font-medium'>Login</Link>
