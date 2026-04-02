@@ -1,23 +1,23 @@
-import  { type FormEvent, useState } from 'react'
+import  { type FormEvent, useState, useEffect } from 'react'
 import { Input } from '../../components/Input'
 import { Label } from '../../components/Label'
 import { auth } from '../../firebase'
 import { createUserWithEmailAndPassword, signOut } from 'firebase/auth'
 import { toast } from 'react-toastify'
-import { UsuarioContext } from '../../context/usuario'
-import { useContext } from 'react'
 
 export function Cadastrar(){
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const [confirmarSenha, setConfirmarSenha] = useState('')
 
-    const { alterar_uid } = useContext(UsuarioContext)
-    
-    async function logout(){
+    async function verificar_logado(){
         await signOut(auth)
-        alterar_uid('')
     }
+
+    useEffect(() => {}, [
+        // Caso o usuário acessar essa página e estiver logado será realizado o logout automaticamente
+        verificar_logado()
+    ])
 
     function cadastrar_conta(e: FormEvent){
         e.preventDefault()
@@ -36,7 +36,7 @@ export function Cadastrar(){
                     setConfirmarSenha('')
 
                     // O Firebase por padrão realiza o login automaticamente ao criar uma conta, realizando logout para impedir
-                    logout() 
+                    verificar_logado() 
                 })
                 .catch(erro => {
                     switch(erro.code){

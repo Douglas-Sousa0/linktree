@@ -1,10 +1,10 @@
 import { Input } from '../../components/Input'
 import { Label } from '../../components/Label'
-import { useState, type FormEvent } from 'react'
+import { useState, useEffect, type FormEvent } from 'react'
 import { useNavigate } from 'react-router'
 
 import { auth } from '../../firebase'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 
 import { toast } from 'react-toastify'
 
@@ -13,6 +13,16 @@ export function Login(){
     const [senha, setSenha] = useState('')
 
     const navigate = useNavigate()
+
+    async function verificar_logado(){
+        await signOut(auth)
+    }
+
+    
+    useEffect(() => {
+        // Caso o usuário acessar essa página e estiver logado será realizado o logout automaticamente
+        verificar_logado()
+    }, [])
 
     async function realizar_login(e: FormEvent){
         e.preventDefault()
