@@ -2,6 +2,7 @@ import { database } from '../../firebase'
 import { collection, getDocs } from 'firebase/firestore'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router'
+import { useTransition } from 'react'
 
 interface PerfisProps{
     usuario: string
@@ -10,29 +11,38 @@ interface PerfisProps{
 
 export function Home(){
     const [perfis, setPerfis] = useState<PerfisProps[]>([])
+    const [pending, startTransition] = useTransition()
 
-    async function buscar_perfis(){
+    function buscar_perfis(){
         const ref = (collection(database, 'linktrees'))
 
-        await getDocs(ref)
-        .then(snapshot => {
-            let lista = [] as any[]
-
-            snapshot.forEach(doc => {
-                lista.push({
-                    usuario: doc.id,
-                    qtdLinks: doc.data().links.length
+        startTransition( async () => {
+            await getDocs(ref)
+            .then(snapshot => {
+                let lista = [] as any[]
+    
+                snapshot.forEach(doc => {
+                    lista.push({
+                        usuario: doc.id,
+                        qtdLinks: doc.data().links.length
+                    })
                 })
+    
+                setPerfis(lista)
             })
-
-            setPerfis(lista)
-            console.log(lista)
         })
+
     }
 
     useEffect(() => {
         buscar_perfis()
     }, [])
+
+    if(pending){
+        return(
+            <h1 className='text-gray-700 text-2xl font-medium w-full text-center mt-15'>Buscando usuários...</h1>
+        )
+    }
 
     return(
         <>
