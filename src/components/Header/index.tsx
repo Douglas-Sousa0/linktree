@@ -7,7 +7,7 @@ import { signOut } from 'firebase/auth'
 import { auth } from '../../firebase'
 
 export function Header(){
-    const { uid, loading } = useContext(UsuarioContext)    
+    const { usuario, loading } = useContext(UsuarioContext)    
 
     async function logout(){
         await signOut(auth)
@@ -21,15 +21,15 @@ export function Header(){
             </nav>
 
             <div className='flex items-center gap-4'>
-                {uid.length > 0 &&
+                {usuario?.length > 0 &&
                 <>
-                <span>{uid}</span>
+                <span>{usuario}</span>
                 <button onClick={ logout } className='px-4 py-1 text-white bg-cyan-900 border-0 rounded-md cursor-pointer'>Sair</button>
                 </>
             
                 }
 
-                {!loading && uid.length === 0 &&
+                {!loading && usuario?.length === 0 &&
                 <>
                     <Link to='/cadastrar' className='font-medium'>Cadastrar</Link>
                     <Link to='/login' className='font-medium'>Login</Link>

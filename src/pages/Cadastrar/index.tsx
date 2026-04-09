@@ -1,11 +1,12 @@
 import  { type FormEvent, useState, useEffect } from 'react'
 import { Input } from '../../components/Input'
 import { Label } from '../../components/Label'
-import { auth } from '../../firebase'
-import { createUserWithEmailAndPassword, signOut } from 'firebase/auth'
+import { auth, database } from '../../firebase'
+import { createUserWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
 import { toast } from 'react-toastify'
 
 export function Cadastrar(){
+    const [nome, setNome] = useState('')
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const [confirmarSenha, setConfirmarSenha] = useState('')
@@ -22,15 +23,20 @@ export function Cadastrar(){
     function cadastrar_conta(e: FormEvent){
         e.preventDefault()
 
-        const caracteres_especiais = ['*', '#', '?', '!', '~', '@', '[', ']', '{', '}', '%', '$', '&']
+        const caracteres_especiais = ['*', '#', '?', '!', '~', '@', '[', ']', '{', '}', '%', '$', '&', '<', '>', '_', ':', '/']
         const possui_caracter_especial = senha.split('').some(caracter => caracteres_especiais.includes(caracter))
 
         if(possui_caracter_especial){
             if(senha === confirmarSenha){
                 createUserWithEmailAndPassword(auth, email, senha)
-                .then( () => {
+                .then( async (dados) => {
+                    await updateProfile(dados.user, {
+                        displayName: nome
+                    })
+                    
                     toast.success('Cadastro realizado com sucesso')
-
+                        
+                    setNome('')
                     setEmail('')
                     setSenha('')
                     setConfirmarSenha('')
@@ -74,6 +80,18 @@ export function Cadastrar(){
             <h1 className='text-white font-medium text-2xl mt-24'>Cadastrar</h1>
             
             <form onSubmit={cadastrar_conta} className='max-w-2xl w-full flex flex-col p-3 rounded-md'>
+                <Label htmlFor='cadastrar-nome'>Nome de usuário</Label>
+
+                <Input
+                type='text'
+                id='cadastrar-nome'   
+                placeholder='Digite seu nome'
+                value={nome}
+                onChange={ e => setNome(e.target.value)}
+                autoComplete='off'
+                required
+                />
+                
                 <Label htmlFor='cadastrar-email'>Email</Label>
 
                 <Input
