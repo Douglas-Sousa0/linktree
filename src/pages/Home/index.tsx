@@ -6,6 +6,7 @@ import { useTransition } from 'react'
 
 interface PerfisProps{
     usuario: string
+    uid: string
     qtdLinks: number
 }
 
@@ -23,6 +24,7 @@ export function Home(){
     
                 snapshot.forEach(doc => {
                     lista.push({
+                        uid: doc.id,
                         usuario: doc.data().nomeUsuario,
                         qtdLinks: doc.data().links.length
                     })
@@ -54,7 +56,7 @@ export function Home(){
                {perfis.map((item) => {
                     return(
                         <Link
-                        to={`/perfil/${item.usuario}`}
+                        to={`/perfil/${item.uid}`}
                         key={item.usuario}
                         className='flex flex-col items-center gap-5 cursor-pointer border border-cyan-900 p-3 w-full hover:scale-110'
                         >

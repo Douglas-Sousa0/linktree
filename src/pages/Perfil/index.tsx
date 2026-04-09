@@ -19,11 +19,13 @@ export function Perfil(){
     const { id_perfil } = useParams() as { id_perfil: string}
 
     const [links, setLinks] = useState<LinksProps[]>([])
+    const [usuario, setUsuario] = useState('')
 
     async function buscar_links(){
         await getDoc(doc(database, 'linktrees', id_perfil))
         .then(snapshot => {
-                setLinks(snapshot.data()?.links)
+            setUsuario(snapshot.data()?.nomeUsuario)
+            setLinks(snapshot.data()?.links)
         })
         .catch(erro => {
             console.log('Erro ao buscar os links')
@@ -38,7 +40,7 @@ export function Perfil(){
 
     return(
         <>
-        <h1 className='text-white text-2xl text-center mt-15 mb-15'>{id_perfil}</h1>
+        <h1 className='text-white text-2xl text-center mt-15 mb-15'>{usuario}</h1>
 
         <main className='max-w-2xl m-auto flex flex-col gap-4'>
 
