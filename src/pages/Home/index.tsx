@@ -23,7 +23,7 @@ export function Home(){
     
                 snapshot.forEach(doc => {
                     lista.push({
-                        usuario: doc.id,
+                        usuario: doc.data().nomeUsuario,
                         qtdLinks: doc.data().links.length
                     })
                 })

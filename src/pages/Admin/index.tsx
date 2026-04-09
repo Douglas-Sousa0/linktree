@@ -25,7 +25,7 @@ export function Admin(){
 
     const [links, setLinks] = useState<LinksProps[]>([])
 
-    const { uid } = useContext(UsuarioContext)
+    const { uid, usuario } = useContext(UsuarioContext)
 
     async function cadastrar_links(e: FormEvent){
         e.preventDefault()
@@ -70,7 +70,8 @@ export function Admin(){
                     }
                 ],
 
-                dataGeral: new Date()
+                dataGeral: new Date(),
+                nomeUsuario: usuario
             })
             .then(() => {
                 buscar_links()

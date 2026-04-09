@@ -1,7 +1,7 @@
 import  { type FormEvent, useState, useEffect } from 'react'
 import { Input } from '../../components/Input'
 import { Label } from '../../components/Label'
-import { auth, database } from '../../firebase'
+import { auth } from '../../firebase'
 import { createUserWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
 import { toast } from 'react-toastify'
 
